@@ -2,129 +2,145 @@
 (Hybrid Machine Learning + Policy Engine Simulation)
 📌 Overview
 
-This project presents a Risk-Based Adaptive Authentication Framework inspired by Zero Trust security principles for cloud-based environments.
+This research presents a Risk-Based Adaptive Authentication Framework inspired by Zero Trust security principles for cloud-based identity and access management environments.
 
-The framework simulates intelligent authentication decision-making using a combination of:
+The framework simulates intelligent authentication decision-making by integrating three complementary components:
 
 A probabilistic Risk Engine
-A Machine Learning-based classification model
-A Policy Engine for access decisions
+A Machine Learning classification model
+A rule-based Policy Engine
 
-It evaluates authentication requests dynamically using contextual and behavioural signals such as:
+Together, these components dynamically evaluate authentication requests based on contextual and behavioural signals, including:
 
 Device trust level
 IP reputation score
 Failed login attempts
 Behavioural anomaly score
-MFA usage
+Multi-Factor Authentication (MFA) usage
 
-This research was developed as part of a Master of Information Technology (Research Project) at Whitecliffe, New Zealand.
+This system was developed as part of a Master of Information Technology (Research Project) at Whitecliffe.
 
 🎯 Research Objectives
-To design and simulate a risk-based adaptive authentication system
-To compare traditional IAM vs AI-driven risk-based authentication
-To evaluate the effectiveness of context-aware risk scoring
-To improve detection of malicious authentication attempts
-To propose a lightweight, deployable security decision framework
+
+The study aims to:
+
+Design and simulate a risk-based adaptive authentication system aligned with Zero Trust principles
+Compare traditional IAM (rule-based) authentication with AI-driven risk-based authentication
+Evaluate the effectiveness of context-aware risk scoring mechanisms
+Improve detection of malicious authentication attempts using behavioural analytics
+Propose a lightweight and deployable security decision-making framework for cloud environments
 🏗 System Architecture
 
-The framework consists of three core modules:
+The proposed framework consists of three core modules:
 
 1️⃣ Risk Engine
 
-Computes probabilistic risk scores based on contextual signals:
+Computes probabilistic risk scores using contextual authentication signals:
 
 IP risk level
 Device trust status
-Behavioural deviation
+Behavioural deviation from baseline patterns
 MFA usage
-Login attempt patterns
+Login attempt frequency and anomalies
 2️⃣ Machine Learning Engine
 
-A supervised learning model (Random Forest Classifier) that learns attack patterns from synthetic authentication data.
+A supervised learning model (Random Forest Classifier) trained on synthetic authentication data to detect malicious patterns and classify login attempts as:
 
+Legitimate
+Attack
 3️⃣ Policy Engine
 
-Transforms risk probabilities into actionable decisions:
+Transforms computed risk probabilities into actionable authentication decisions:
 
-ALLOW
-MFA_CHALLENGE
-DENY
-⚙️ Experiment Design
+ALLOW → Low-risk authentication
+MFA_CHALLENGE → Medium-risk or uncertain behaviour
+DENY → High-risk or likely attack
+⚙️ Experimental Design
 
-The study follows a controlled simulation-based experimental design:
+The study follows a simulation-based experimental methodology.
 
 🔹 Dataset Generation
 2000 synthetic authentication events
 150 simulated user profiles
-Attack injection (15% malicious traffic)
+15% injected malicious attack scenarios
+🔹 Attack Simulation Types
+Credential stuffing
+Impossible travel detection
+Brute-force attempts
+Bot-like automated activity
 🔹 Experimental Setup
 
-Two systems are compared:
+Two authentication systems are compared:
 
 System	Description
-Baseline IAM	Rule-based authentication using static thresholds
-Risk-Based Model	ML-based adaptive authentication system
-🔹 Evaluation Strategy
-
-Both systems are evaluated using:
-
-Precision
-Recall
-F1-score
-ROC-AUC
-Confusion Matrix Analysis
+Baseline IAM	Static rule-based authentication using threshold logic
+Risk-Based Model	Machine learning-driven adaptive authentication system
 📊 Evaluation Metrics
+
+System performance is evaluated using:
+
 Accuracy
 Precision
 Recall
 F1-score
+ROC-AUC
 False Positive Rate
 False Negative Rate
-ROC-AUC
-🧪 Output & Results
+Confusion Matrix Analysis
+🧪 Outputs Generated
 
-The simulator generates:
+The simulation produces the following artifacts:
 
-Risk distribution plots
-Confusion matrices
+Risk distribution visualisations
+Confusion matrix heatmaps
 ROC curves
-Feature importance charts
-Model comparison tables
-CSV export of predictions
+Feature importance analysis
+Model comparison metrics
+CSV exports of predictions and decisions
 
-All outputs are saved in:
+All outputs are stored in:
 
 /results
 🛠 Technologies Used
 Python
-Pandas
 NumPy
+Pandas
 Scikit-learn
 Matplotlib
 Seaborn
-🚀 How to Run
-1. Install dependencies
+🚀 Execution Instructions
+
+Install dependencies:
+
 pip install -r requirements.txt
-2. Run simulator
+
+Run simulation:
+
 python simulator.py
-3. Outputs generated
+
+Outputs generated:
+
 Console evaluation metrics
-/results folder containing graphs
-synthetic_authentication_dataset.csv
-results/model_results.csv
+/results directory containing graphs and evaluation files
 📌 Research Contribution
 
-This work bridges the gap between:
+This study contributes to the intersection of:
 
-Theoretical Zero Trust security models
-Practical risk-based authentication systems
-Lightweight machine learning-based IAM frameworks
+Zero Trust security architectures
+Machine learning-based authentication systems
+Risk-adaptive Identity and Access Management (IAM)
 
-It demonstrates how adaptive risk scoring + ML classification + policy enforcement can improve authentication security decisions.
+It demonstrates how combining:
+
+behavioural analytics
+probabilistic risk scoring
+supervised machine learning
+and policy-based decision systems
+
+can significantly enhance authentication security decision-making in cloud environments.
 
 👨‍💻 Author
 
 Ramandeep Singh
 Master of Information Technology
-Whitecliffe, New Zealand
+Whitecliffe
