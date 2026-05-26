@@ -1,2 +1,3 @@
 # risk-based-authentication-framework
 Master of Information Technology research project focused on adaptive authentication, contextual risk evaluation, and intelligent access control for cloud-based systems.
+This repository implements a research-grade simulation of a Risk-Based Adaptive Authentication Framework. The system combines a probabilistic risk engine, machine learning-based classification model, and policy-based decision engine to evaluate authentication attempts. It compares traditional rule-based IAM with an AI-driven risk-based approach using synthetic but realistic behavioral data. The project includes full evaluation metrics, ROC analysis, feature importance, and visualization outputs for academic research and experimentation.
