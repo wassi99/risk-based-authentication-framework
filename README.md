@@ -1,83 +1,103 @@
 🧠 Risk-Based Adaptive Authentication Framework
-(Hybrid Machine Learning + Policy Engine Simulation)
+(Hybrid Machine Learning + Policy Engine using Kaggle RBA Dataset)
 📌 Overview
 
-This research presents a Risk-Based Adaptive Authentication Framework inspired by Zero Trust security principles for cloud-based identity and access management environments.
+This research presents a Risk-Based Adaptive Authentication Framework inspired by Zero Trust security principles for modern cloud-based Identity and Access Management (IAM) systems.
 
-The framework simulates intelligent authentication decision-making by integrating three complementary components:
+The framework simulates intelligent authentication decision-making by integrating three core components:
 
 A probabilistic Risk Engine
-A Machine Learning classification model
+A supervised Machine Learning classification model
 A rule-based Policy Engine
 
-Together, these components dynamically evaluate authentication requests based on contextual and behavioural signals, including:
+These components work together to evaluate authentication requests using contextual and behavioural signals extracted from a real-world Kaggle Risk-Based Authentication (RBA) dataset.
 
-Device trust level
-IP reputation score
-Failed login attempts
-Behavioural anomaly score
-Multi-Factor Authentication (MFA) usage
+The dataset contains real authentication log attributes such as:
 
-This system was developed as part of a Master of Information Technology (Research Project) at Whitecliffe.
+Login timestamps
+Device and browser information
+IP address and geographic signals
+Authentication success/failure labels
+Attack indicators (e.g., account takeover, suspicious IP activity)
+
+This project was developed as part of a Master of Information Technology (Research Project) at Whitecliffe.
 
 🎯 Research Objectives
 
 The study aims to:
 
 Design and simulate a risk-based adaptive authentication system aligned with Zero Trust principles
-Compare traditional IAM (rule-based) authentication with AI-driven risk-based authentication
-Evaluate the effectiveness of context-aware risk scoring mechanisms
+Evaluate traditional IAM (rule-based) vs AI-driven risk-based authentication
 Improve detection of malicious authentication attempts using behavioural analytics
-Propose a lightweight and deployable security decision-making framework for cloud environments
+Demonstrate the effectiveness of context-aware machine learning-based risk scoring
+Propose a lightweight and deployable authentication decision framework for cloud environments
 🏗 System Architecture
 
 The proposed framework consists of three core modules:
 
 1️⃣ Risk Engine
 
-Computes probabilistic risk scores using contextual authentication signals:
+Computes probabilistic risk scores using contextual authentication features derived from the Kaggle RBA dataset.
 
-IP risk level
+Key input features:
+
 Device trust status
-Behavioural deviation from baseline patterns
-MFA usage
-Login attempt frequency and anomalies
+IP risk level (encoded from dataset attributes)
+Failed login attempts
+Behavioural anomaly score (derived feature)
+MFA usage indicator
+
+The output is a calibrated probability:
+
+R(X)=P(Attack∣X)
+
+produced using a Random Forest classifier with probability calibration.
+
 2️⃣ Machine Learning Engine
 
-A supervised learning model (Random Forest Classifier) trained on synthetic authentication data to detect malicious patterns and classify login attempts as:
+A supervised learning model (Random Forest Classifier) trained on the Kaggle RBA dataset to classify authentication events.
+
+Output classes:
 
 Legitimate
 Attack
+
+The model learns behavioural patterns directly from real-world authentication logs rather than synthetic simulation.
+
 3️⃣ Policy Engine
 
-Transforms computed risk probabilities into actionable authentication decisions:
+Transforms the predicted risk score into authentication decisions:
 
 ALLOW → Low-risk authentication
-MFA_CHALLENGE → Medium-risk or uncertain behaviour
-DENY → High-risk or likely attack
+MFA_CHALLENGE → Medium-risk authentication requiring additional verification
+DENY → High-risk or malicious authentication attempt
+
+Decision-making is based on an adaptive percentile-based threshold derived from model predictions.
+
 ⚙️ Experimental Design
 
-The study follows a simulation-based experimental methodology.
+The study follows a simulation-based evaluation approach using real-world authentication data.
 
-🔹 Dataset Generation
-2000 synthetic authentication events
-150 simulated user profiles
-15% injected malicious attack scenarios
-🔹 Attack Simulation Types
-Credential stuffing
-Impossible travel detection
-Brute-force attempts
-Bot-like automated activity
+🔹 Dataset Description
+Dataset: Kaggle Risk-Based Authentication (RBA) Dataset
+Size: ~150,000 authentication records
+Nature: Real-world inspired authentication logs
+Type: Binary classification (Legitimate vs Attack)
+🔹 Attack Behaviour Represented in Dataset
+Account takeover attempts
+Suspicious IP activity
+Failed authentication patterns
+Unusual login behaviour
 🔹 Experimental Setup
 
-Two authentication systems are compared:
+Two systems are compared:
 
 System	Description
-Baseline IAM	Static rule-based authentication using threshold logic
+Baseline IAM	Rule-based authentication using static thresholds
 Risk-Based Model	Machine learning-driven adaptive authentication system
 📊 Evaluation Metrics
 
-System performance is evaluated using:
+The framework is evaluated using:
 
 Accuracy
 Precision
@@ -86,17 +106,17 @@ F1-score
 ROC-AUC
 False Positive Rate
 False Negative Rate
-Confusion Matrix Analysis
+Confusion Matrix
 🧪 Outputs Generated
 
-The simulation produces the following artifacts:
+The simulation generates:
 
-Risk distribution visualisations
-Confusion matrix heatmaps
-ROC curves
-Feature importance analysis
-Model comparison metrics
-CSV exports of predictions and decisions
+Risk score distributions
+ROC curve analysis
+Confusion matrix visualisations
+Feature impact analysis
+Model evaluation metrics
+CSV export of predictions
 
 All outputs are stored in:
 
@@ -117,30 +137,35 @@ pip install -r requirements.txt
 Run simulation:
 
 python simulator.py
+📌 Output Artifacts
 
-Outputs generated:
+After execution:
 
-Console evaluation metrics
-/results directory containing graphs and evaluation files
+Console prints evaluation metrics
+/results folder contains:
+ROC curves
+Confusion matrices
+Risk distribution plots
+Final evaluation CSV files
 📌 Research Contribution
 
 This study contributes to the intersection of:
 
-Zero Trust security architectures
-Machine learning-based authentication systems
-Risk-adaptive Identity and Access Management (IAM)
+Zero Trust Security Architectures
+Machine Learning-based Authentication Systems
+Risk-Adaptive Identity and Access Management (IAM)
 
 It demonstrates how combining:
 
-behavioural analytics
-probabilistic risk scoring
-supervised machine learning
-and policy-based decision systems
+Behavioural analytics
+Probabilistic risk scoring
+Supervised machine learning
+Policy-based decision systems
 
-can significantly enhance authentication security decision-making in cloud environments.
+can significantly improve authentication security in cloud environments.
 
 👨‍💻 Author
 
 Ramandeep Singh
 Master of Information Technology
-Whitecliffe
+Whitecliffe (New Zealand)
