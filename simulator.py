@@ -1,7 +1,6 @@
 # =========================================================
 # Risk-Based Adaptive Authentication Framework
 # Author: Ramandeep Singh
-# Course: Mater of Information Technology, WhiteCliffe NZ
 # =========================================================
 
 import os
@@ -130,6 +129,20 @@ model = RandomForestClassifier(
     random_state=42
 )
 
+from sklearn.model_selection import cross_val_score
+
+cv_scores = cross_val_score(
+    model,
+    X,
+    y,
+    cv=5,
+    scoring="f1",
+    n_jobs=-1
+)
+
+print("\nCross Validation F1 Scores:", cv_scores)
+print("Mean CV F1:", cv_scores.mean())
+
 model.fit(X_train, y_train)
 
 ml_probs = model.predict_proba(X_test)[:, 1]
@@ -145,6 +158,8 @@ best_idx = np.argmax(f1_scores)
 best_threshold = thresholds[max(best_idx - 1, 0)]
 
 print("\nBest Threshold (F1 Optimized):", best_threshold)
+
+best_threshold = np.clip(best_threshold, 0.3, 0.7)
 
 ml_preds = (ml_probs >= best_threshold).astype(int)
 
@@ -172,7 +187,7 @@ print("\n================ BASELINE IAM =================")
 print(classification_report(y_test, baseline_preds, zero_division=0))
 
 print("\n================ ML MODEL =================")
-print(classification_report(y_test, ml_preds))
+print(classification_report(y_test, ml_preds, zero_division=0))
 
 roc_auc = roc_auc_score(y_test, ml_probs)
 print("\nROC-AUC:", roc_auc)
@@ -196,6 +211,39 @@ plt.plot([0, 1], [0, 1], "--")
 plt.title("ROC Curve - Zero Trust RBA")
 plt.legend()
 plt.savefig(RESULTS_DIR / "roc_curve.png")
+plt.close()
+
+# =========================================================
+# CONFUSION MATRIX VISUALISATION (ML MODEL)
+# =========================================================
+
+import seaborn as sns
+
+cm = confusion_matrix(y_test, ml_preds)
+
+plt.figure()
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
+plt.title("Confusion Matrix - ML Model")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+
+plt.savefig(RESULTS_DIR / "confusion_matrix_ml.png")
+plt.close()
+
+# =========================================================
+# PRECISION-RECALL CURVE
+# =========================================================
+
+precision, recall, _ = precision_recall_curve(y_test, ml_probs)
+
+plt.figure()
+plt.plot(recall, precision, label="PR Curve")
+plt.xlabel("Recall")
+plt.ylabel("Precision")
+plt.title("Precision-Recall Curve - RBA Model")
+plt.legend()
+
+plt.savefig(RESULTS_DIR / "pr_curve.png")
 plt.close()
 
 # =========================================================
@@ -236,3 +284,86 @@ audit.to_csv(RESULTS_DIR / "audit_log.csv", index=False)
 
 print("\n✅ SIMULATOR COMPLETE (CLEAN THESIS VERSION)")
 print("📁 Results saved in /results folder")
+
+# =========================================================
+# POLICY ENGINE VISUALISATION (ADD-ON)
+# =========================================================
+
+plt.figure()
+
+plt.hist(ml_probs, bins=30, alpha=0.7)
+
+plt.axvline(adaptive_threshold * 0.9, color='green', linestyle='--', label='ALLOW boundary')
+plt.axvline(adaptive_threshold * 1.1, color='orange', linestyle='--', label='MFA boundary')
+
+plt.title("Policy Engine Decision Boundaries")
+plt.legend()
+
+plt.savefig(RESULTS_DIR / "policy_engine.png")
+plt.close()
+
+# =========================================================
+# SAVE CONFUSION MATRICES (CSV)
+# =========================================================
+
+cm_ml = confusion_matrix(y_test, ml_preds)
+cm_base = confusion_matrix(y_test, baseline_preds)
+
+pd.DataFrame(cm_ml).to_csv(RESULTS_DIR / "confusion_matrix_ml.csv", index=False)
+pd.DataFrame(cm_base).to_csv(RESULTS_DIR / "confusion_matrix_baseline.csv", index=False)
+
+# =========================================================
+# CONFUSION MATRIX - BASELINE IAM
+# =========================================================
+
+cm_baseline = confusion_matrix(y_test, baseline_preds)
+
+plt.figure()
+plt.imshow(cm_baseline, cmap="Reds")
+plt.title("Confusion Matrix - Baseline IAM")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+
+for i in range(2):
+    for j in range(2):
+        plt.text(j, i, cm_baseline[i, j], ha="center", va="center")
+
+plt.colorbar()
+plt.savefig(RESULTS_DIR / "confusion_matrix_baseline.png")
+plt.close()
+
+# =========================================================
+# CROSS VALIDATION SUMMARY
+# =========================================================
+
+cv_summary = {
+    "fold_1": cv_scores[0],
+    "fold_2": cv_scores[1],
+    "fold_3": cv_scores[2],
+    "fold_4": cv_scores[3],
+    "fold_5": cv_scores[4],
+    "mean": cv_scores.mean(),
+    "std": cv_scores.std()
+}
+
+pd.DataFrame([cv_summary]).to_csv(
+    RESULTS_DIR / "cross_validation_summary.csv",
+    index=False
+)
+
+# =========================================================
+# EXPERIMENT SUMMARY
+# =========================================================
+
+summary = pd.DataFrame([{
+    "ROC_AUC": roc_auc,
+    "Baseline_F1": classification_report(y_test, baseline_preds, output_dict=True)["1"]["f1-score"],
+    "ML_F1": classification_report(y_test, ml_preds, output_dict=True)["1"]["f1-score"],
+    "Baseline_Accuracy": classification_report(y_test, baseline_preds, output_dict=True)["accuracy"],
+    "ML_Accuracy": classification_report(y_test, ml_preds, output_dict=True)["accuracy"],
+    "CV_Mean_F1": cv_scores.mean(),
+    "CV_STD_F1": cv_scores.std()
+}])
+
+summary.to_csv(RESULTS_DIR / "experiment_summary.csv", index=False)
+audit.to_csv(RESULTS_DIR / "audit_log_detailed.csv", index=False)
